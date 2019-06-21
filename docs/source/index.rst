@@ -9,11 +9,11 @@ Welcome to Torpedo's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-    readme
-    new_plugins
-    remote_cluster
-    contributing
+   
+   readme
+   contributing
+   new_plugins
+   remote_plugins
 
 
 
