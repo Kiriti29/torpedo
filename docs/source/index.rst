@@ -10,6 +10,11 @@ Welcome to Torpedo's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+    readme
+    new_plugins
+    remote_cluster
+    contributing
+
 
 
 Indices and tables
