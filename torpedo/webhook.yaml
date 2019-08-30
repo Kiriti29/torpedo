@@ -14,6 +14,7 @@ spec:
       labels:
         torpedo-controller: enabled
     spec:
+      serviceAccountName: resiliency
       nodeSelector:
         torpedo-controller: enabled
       containers:
@@ -23,11 +24,10 @@ spec:
         - containerPort: 30025
         command: ["python3", "/hooks/sync.py"]
         volumeMounts:
-        - name: hooks
-          mountPath: /hooks/templates
         - name: torpedo-metacontroller
           mountPath: /hooks
-          subPath: sync.yaml
+        - name: hooks
+          mountPath: /hooks/templates
           
       volumes:
       - name: hooks
@@ -46,6 +46,14 @@ spec:
               path: chaos-parameters.yaml
             - key: torpedo-traffic-orchestrator.yaml
               path: torpedo-traffic-orchestrator.yaml
+
+      - name: torpedo-metacontroller
+        configMap:
+          name: torpedo-metacontroller
+          items:
+            - key: torpedo-metacontroller
+              path: sync.py
+
 ---
 apiVersion: v1
 kind: Service

@@ -14,7 +14,7 @@ from keystone import Keystone
 from logger_agent import logger
 from nova import Nova
 from neutron import Neutron
-# from node_drain import NodeDrain
+from node_drain import NodeDrain
 from ucp import UCP
 from vm_ping import VmPing
 

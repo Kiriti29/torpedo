@@ -91,6 +91,8 @@ data:
             name: {{metadata['name']}}
             namespace: metacontroller
           spec:
+            nodeSelector:
+              resiliency: enabled
             entrypoint: torpedo-dag
             serviceAccountName: resiliency
             templates:
@@ -348,6 +350,7 @@ data:
                 labels:
                   resiliency: enabled
               spec:
+                serviceAccountName: resiliency
                 nodeSelector:
                   resiliency: enabled
                 restartPolicy: OnFailure
@@ -397,13 +400,14 @@ data:
                 labels:
                   resiliency: enabled
               spec:
+                serviceAccountName: resiliency
                 nodeSelector:
                   resiliency: enabled
                 restartPolicy: OnFailure
                 containers:
                 - command:
                   - python3
-                  - /opt/torpedo/coreObjectClass.py
+                  - /opt/torpedo/main.py
                   - "{{inputs.parameters.auth}}"
                   - {{inputs.parameters.service-mapping}}
                   - "{{inputs.parameters.job-duration}}"

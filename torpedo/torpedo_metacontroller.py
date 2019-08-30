@@ -12,8 +12,8 @@ import yaml
 def is_job_finished(job):
     if 'status' in job:
         status_phase = job['status'].get('phase', "NO_STATUS_PHASE_YET")
-    if status_phase == "Succeeded":
-        return True
+        if status_phase == "Succeeded":
+            return True
     """
     desiredNumberScheduled = job['status'].get('desiredNumberScheduled',1)
     numberReady = job['status'].get('numberReady',0)
@@ -28,9 +28,9 @@ def new_workflow(job):
     wf = {}
     template_filename = 'torpedo_argo.j2'
     script_path = os.path.dirname(os.path.abspath(__file__))
-    template_path = os.path.join("script_path", "templates")
+    template_path = os.path.join(script_path, "templates")
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(
-                                 script_path))
+                                     template_path))
     wf_text = re.sub(
         (re.compile('[\s]+None')), '', environment.get_template(
          template_filename).render(job))
@@ -45,7 +45,6 @@ class Controller(BaseHTTPRequestHandler):
 
         desired_status = {}
         child = '%s-dj' % (job['metadata']['name'])
-        # import pdb; pdb.set_trace()
 
         self.log_message(" Job: %s", job)
         self.log_message(" Children: %s", children)

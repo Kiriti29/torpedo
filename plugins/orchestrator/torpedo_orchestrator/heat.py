@@ -53,4 +53,7 @@ class Heat(Base, Openstack):
                 message = result.text
                 logger.info("Error message: {}".format(message))
             logger.info('Stack Deleted')
+        else:
+            tc_status = "FAIL"
+            message = response.text
         return tc_status, message, self.tc

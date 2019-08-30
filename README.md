@@ -72,7 +72,7 @@ cat torpedo/controller.yaml | kubectl create -f -
 
 ```
 kubectl create configmap torpedo-metacontroller -n metacontroller
---from-file=torpedo_metacontroller.py
+--from-file=torpedo-metacontroller=torpedo_metacontroller.py
 cat torpedo/torpedo-controller.yaml | kubectl create -n metacontroller -f –
 cat torpedo/webhook.yaml | kubectl create -n metacontroller -f –
 ```
