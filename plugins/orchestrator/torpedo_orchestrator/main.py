@@ -15,6 +15,7 @@ from logger_agent import logger
 from nova import Nova
 from neutron import Neutron
 from node_drain import NodeDrain
+from node_power_off import NodePowerOff
 from ucp import UCP
 from vm_ping import VmPing
 

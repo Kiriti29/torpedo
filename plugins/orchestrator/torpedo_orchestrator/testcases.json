@@ -1,4 +1,9 @@
 {
+                "node-power-off": {
+                                "name": "node_power_off",
+                                "operation": "POST",
+                                "service-mapping": "NodePowerOff"
+                                },
 		"nova": {
 				"name": "nova_list",
 				"service_type": "compute",
