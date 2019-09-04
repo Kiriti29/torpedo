@@ -1,8 +1,5 @@
-from time import sleep
 from pyghmi.ipmi import command
 from pyghmi.exceptions import IpmiException
-
-from heat import Heat
 from logger_agent import logger
 
 
@@ -52,31 +49,16 @@ class power_operation():
         ipmi_object.get_power()
 
 
-class NodeDrain(Heat):
+class NodePowerOff:
 
     def __init__(self, tc, auth, **kwargs):
-        super().__init__(tc, auth, **kwargs)
-        self.nodes = kwargs.get('nodes', None)
+        self.ipmi_ip = kwargs.get("ipmi_ip", None)
+        self.user = kwargs.get("user", None)
+        self.password = kwargs.get("password", None)
+        self.node = kwargs.get("node_name", None)
+        self.po = power_operation(self.ipmi_ip, self.user, self.password)
 
-    def get(self):
-        (tc_status, message) = self.gc.GET(self.url, self.headers,
-                                           data=self.data)
-        return tc_status, message, self.tc
+    def post(self):
+        logger.info("Powering off node %s" % (self.node))
+        self.po.set_power_state("off")
 
-    def post(self, **kwargs):
-        tc_status, message, tc = super().post()
-        if tc_status != "FAIL":
-            for node in self.nodes:
-                po = power_operation(node['ipmi_ip'], node['user'],
-                                     node['password'])
-                logger.info("Powering off the node %s" % (
-                            node['node_name']))
-                po.set_power_state("off")
-                while True:
-                    tc_status, message, tc = super().post()
-                    if tc_status == "PASS":
-                        break
-                logger.info("Powering on the node %s" % (
-                            node['node_name']))
-                po.set_power_state("on")
-        return tc_status, message, self.tc
