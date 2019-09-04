@@ -34,11 +34,11 @@ class power_operation():
         while attempts < 5:
             try:
                 ipmi_object = self.initialize_ipmi_session()
-                ipmi_object.ipmi_session.logout()
                 ipmi_object.set_power(state)
+                break
             except IpmiException as iex:
-                self.logger.error("Error sending command: %s" % str(iex))
-                self.logger.warning(
+                logger.error("Error sending command: %s" % str(iex))
+                logger.warning(
                     "IPMI command failed, retrying after 15 seconds...")
                 sleep(15)
                 attempts = attempts + 1
@@ -52,13 +52,17 @@ class power_operation():
 class NodePowerOff:
 
     def __init__(self, tc, auth, **kwargs):
-        self.ipmi_ip = kwargs.get("ipmi_ip", None)
-        self.user = kwargs.get("user", None)
-        self.password = kwargs.get("password", None)
-        self.node = kwargs.get("node_name", None)
-        self.po = power_operation(self.ipmi_ip, self.user, self.password)
+        self.nodes = kwargs.get("nodes", None)
+        self.tc = tc
 
     def post(self):
-        logger.info("Powering off node %s" % (self.node))
-        self.po.set_power_state("off")
+        tc_status = "FAIL"
+        message = "Failed to power off the node"
+        for node in self.nodes:
+            po = power_operation(node['ipmi_ip'], node['user'], node['password'])
+            logger.info("Powering off node %s" % (node['node_name']))
+            po.set_power_state("off")
+            tc_status = "PASS"
+            message = "Powered off the node %s" % (node['node_name'])
+        return tc_status, message, self.tc
 
